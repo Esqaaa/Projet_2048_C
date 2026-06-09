@@ -3,6 +3,8 @@
 #include <conio.h>
 #include <time.h>
 
+extern int TAILLE;
+
 // Prototypes des fonctions externes
 void afficher_ascii();
 
@@ -27,6 +29,14 @@ int main() {
     // Affichage du logo ASCII
     afficher_ascii();
     system("pause");
+
+    // Demande à l'utilisateur de choisir la taille de la grille
+    printf("Choisissez la taille de la grille (3, 4 ou 5) : ");
+    scanf("%d", &TAILLE);
+    if (TAILLE < 3 || TAILLE > 5) {
+        printf("Taille invalide ! Utilisation de la taille par défaut 4x4.\n");
+        TAILLE = 4;
+    }
 
     // Initialisation du générateur de nombres aléatoires
     srand(time(NULL));

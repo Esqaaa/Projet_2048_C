@@ -2,16 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-void afficher_case(int valeur);
+// Association des valeurs de tuiles à des couleurs ANSI
+#define RESET "\x1b[0m"
+#define ROSE  "\x1b[38;5;199m"
+#define BLEU  "\x1b[38;5;51m"
 
-// Couleurs ANSI pour les tuiles (venant de couleur.c)
-const char* couleur(int valeur);
-
-// Définition de la taille de la grille
-#define TAILLE 4
-#define RESET   "\x1b[0m"
-#define ROSE    "\x1b[38;5;199m"
-#define BLEU    "\x1b[38;5;51m"
+// Fonctions externes
+extern int TAILLE;
 
 // Structure du jeu
 typedef struct {
@@ -19,23 +16,20 @@ typedef struct {
     int score;
 } Jeu;
 
-
-// Affichage de la grille + score
+// Affiche une case
 void afficher_case(int valeur) {
-    // Si la case est vide, afficher un tiret
     if (valeur == 0) {
-        printf(BLEU "|" RESET "  -   ");
-
+        printf(BLEU "|" RESET "  .   ");
         return;
     }
 
-    // Convertit la valeur en chaîne de caractères pour l'affichage
+    // Centrage du nombre dans la case
     char buffer[16];
     sprintf(buffer, "%d", valeur);
 
-    // Calcule l'espacement pour centrer la valeur dans la case
+    // Calcul des espaces à gauche et à droite pour centrer le nombre
     int len = strlen(buffer);
-    int total = 6; 
+    int total = 6;
     int left = (total - len) / 2;
     int right = total - len - left;
 
@@ -46,40 +40,48 @@ void afficher_case(int valeur) {
         printf(" ");
     }
 
-    // Affiche la valeur avec la couleur correspondante
-    printf("%s%s%s", couleur(valeur), buffer, "\x1b[0m");
+    printf("%s%s%s", BLEU, buffer, RESET);
 
     // Espaces à droite
     for (int i = 0; i < right; i++) {
         printf(" ");
     }
 
+    printf(RESET);
 }
 
-
-// Affichage de la grille + score
 void afficher(Jeu *jeu) {
-    // Efface la console
+    // Effacer l'écran
     system("cls");
 
     // Affichage du score
     printf("Score : %d\n\n", jeu->score);
 
-    printf(BLEU "+------+------+------+------+" RESET "\n");
+    printf(BLEU);
+    
+    // Affichage de la ligne
+    for (int i = 0; i < TAILLE; i++)
+        printf("+------");
+    printf("+\n" RESET);
 
-    // Affichage de chaque tuile avec sa couleur 
+    // Affichage de la grille
     for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
 
-            int valeur = jeu->grille[i][j];
+        // Affichage des cases
+        for (int j = 0; j < TAILLE; j++)
+            afficher_case(jeu->grille[i][j]);
 
-            afficher_case(valeur);
-        }
-        printf(BLEU "|\n" RESET);
-        printf(BLEU "+------+------+------+------+" RESET "\n");
+        printf("|\n");
+
+        printf(BLEU);
+
+        // Affichage de la ligne de séparation
+        for (int j = 0; j < TAILLE; j++)
+            printf("+------");
+        printf("+\n" RESET);
     }
 
-    // Instructions pour le joueur
+    // Affichage des commandes
     printf("\nDeplacement (Z Q S D)\n");
     printf("Quitter (X)\n");
     printf("Rejouer (R)\n");

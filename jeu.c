@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TAILLE 4
+int TAILLE = 4;
 
 typedef struct {
     int **grille;
