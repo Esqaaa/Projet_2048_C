@@ -9,6 +9,7 @@
 
 // Fonctions externes
 extern int TAILLE;
+const char* couleur(int valeur);
 
 // Structure du jeu
 typedef struct {
@@ -19,7 +20,7 @@ typedef struct {
 // Affiche une case
 void afficher_case(int valeur) {
     if (valeur == 0) {
-        printf(BLEU "|" RESET "  .   ");
+        printf(ROSE "|" RESET "  .   ");
         return;
     }
 
@@ -33,14 +34,14 @@ void afficher_case(int valeur) {
     int left = (total - len) / 2;
     int right = total - len - left;
 
-    printf(BLEU "|" RESET);
+    printf(ROSE "|" RESET);
 
     // Espaces à gauche
     for (int i = 0; i < left; i++) {
         printf(" ");
     }
 
-    printf("%s%s%s", BLEU, buffer, RESET);
+    printf("%s%s" RESET, couleur(valeur), buffer);
 
     // Espaces à droite
     for (int i = 0; i < right; i++) {
@@ -57,7 +58,7 @@ void afficher(Jeu *jeu) {
     // Affichage du score
     printf("Score : %d\n\n", jeu->score);
 
-    printf(BLEU);
+    printf(ROSE);
     
     // Affichage de la ligne
     for (int i = 0; i < TAILLE; i++)
@@ -71,9 +72,9 @@ void afficher(Jeu *jeu) {
         for (int j = 0; j < TAILLE; j++)
             afficher_case(jeu->grille[i][j]);
 
-        printf("|\n");
+        printf(ROSE "|" RESET "\n");
 
-        printf(BLEU);
+        printf(ROSE);
 
         // Affichage de la ligne de séparation
         for (int j = 0; j < TAILLE; j++)
