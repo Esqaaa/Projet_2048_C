@@ -15,36 +15,74 @@ typedef struct {
 
 // Prototypes des fonctions du jeu
 Jeu* creer_jeu();
+
 void detruire_jeu(Jeu *jeu);
 void afficher(Jeu *jeu);
 void ajouter_tuile(Jeu *jeu);
 void deplacer_gauche(Jeu *jeu);
 void pivoter(Jeu *jeu);
+void sauvegarder(Jeu *jeu);
+void charger(Jeu *jeu);
+
+// Fonctions de logique du jeu
 int mouvements_possibles(Jeu *jeu);
 int victoire(Jeu *jeu);
+int defaite(Jeu *jeu);
 
 // Fonction principale
 int main() {
 
-    // Affichage du logo ASCII
     afficher_ascii();
     system("pause");
 
-    // Demande à l'utilisateur de choisir la taille de la grille
-    printf("Choisissez la taille de la grille (3, 4 ou 5) : ");
-    scanf("%d", &TAILLE);
-    if (TAILLE < 3 || TAILLE > 5) {
-        printf("Taille invalide ! Utilisation de la taille par défaut 4x4.\n");
-        TAILLE = 4;
-    }
+    char choix;
 
-    // Initialisation du générateur de nombres aléatoires
+    printf("(C) Charger la sauvegarde\n");
+    printf("(N) Nouvelle partie\n");
+    printf("(X) Quitter\n");
+    printf("Votre choix : ");
+    choix = getch();
+
+    // Initialisation RNG
     srand(time(NULL));
 
-    // Création du jeu et ajout des 2 tuiles initiales
-    Jeu *jeu = creer_jeu();
-    ajouter_tuile(jeu);
-    ajouter_tuile(jeu);
+    Jeu *jeu = NULL;
+
+    if (choix == 'C' || choix == 'c') {
+
+        // 1) Lire la taille dans le fichier AVANT de créer le jeu
+        FILE *f = fopen("save.txt", "r");
+        if (!f) {
+            printf("Aucune sauvegarde trouvée.\n");
+            system("pause");
+            return 0;
+        }
+
+        fscanf(f, "%d", &TAILLE);
+        fclose(f);
+
+        // 2) Créer le jeu avec la bonne taille
+        jeu = creer_jeu();
+
+        // 3) Charger la sauvegarde
+        charger(jeu);
+    }
+    else if (choix == 'N' || choix == 'n') {
+
+        printf("Choisissez la taille de la grille (3, 4 ou 5) : ");
+        scanf("%d", &TAILLE);
+        if (TAILLE < 3 || TAILLE > 5) {
+            printf("Taille invalide ! Utilisation de 4x4.\n");
+            TAILLE = 4;
+        }
+
+        jeu = creer_jeu();
+        ajouter_tuile(jeu);
+        ajouter_tuile(jeu);
+    }
+    else {
+        return 0;
+    }
 
     char c;
 
@@ -114,8 +152,19 @@ int main() {
 
             default:
                 mouvement_effectue = 0;
-                printf("\n\x1b[91mTouche invalide ! Utilise Z Q S D, X ou R.\x1b[0m\n");
+                printf("\n\x1b[91mTouche invalide ! Utilise Z Q S D pour bouger, X, W, C ou R.\x1b[0m\n");
                 system("pause");
+                break;
+
+            case 'w':
+            case 'W':
+                sauvegarder(jeu);
+                break;
+            
+            case 'c':
+            case 'C':
+                charger(jeu);
+                mouvement_effectue = 0;
                 break;
         }
 

@@ -86,5 +86,6 @@ void afficher(Jeu *jeu) {
     printf("\nDeplacement (Z Q S D)\n");
     printf("Quitter (X)\n");
     printf("Rejouer (R)\n");
+    printf("Sauvegarder (W)\n");
     printf("Votre choix : ");
 }
