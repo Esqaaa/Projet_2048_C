@@ -113,3 +113,4 @@ int victoire(Jeu *jeu) {
                 return 1;
     return 0;
 }
+
