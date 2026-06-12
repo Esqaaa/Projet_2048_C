@@ -87,5 +87,5 @@ void afficher(Jeu *jeu) {
     printf("Quitter (X)\n");
     printf("Rejouer (R)\n");
     printf("Sauvegarder (W)\n");
-    printf("Votre choix : ");
+    printf("Votre choix : \n");
 }

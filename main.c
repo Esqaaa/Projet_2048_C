@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <time.h>
 
-extern int TAILLE;
+int TAILLE = 4;
 
 // Prototypes des fonctions externes
 void afficher_ascii();
@@ -57,7 +57,7 @@ int main() {
         // Lire la taille dans le fichier AVANT de créer le jeu
         FILE *f = fopen("save.txt", "r");
         if (!f) {
-            printf("Aucune sauvegarde trouvée.\n");
+            printf("Aucune sauvegarde trouvee.\n");
             system("pause");
             return 0;
         }
@@ -93,6 +93,7 @@ int main() {
     // Boucle de jeu principale
     while (1) {
         // Affichage de la grille et du score
+        system("cls");
         afficher(jeu);
 
         // Vérification de la victoire ou de la défaite
@@ -148,21 +149,35 @@ int main() {
                 mouvement_effectue = 0;
                 break;
 
-            default:
-                mouvement_effectue = 0;
-                printf("\n\x1b[91mTouche invalide ! Utilise Z Q S D pour bouger, X, W, C ou R.\x1b[0m\n");
-                system("pause");
-                break;
-
             case 'w':
             case 'W':
                 sauvegarder(jeu);
+                mouvement_effectue = 0;
                 break;
             
             case 'c':
             case 'C':
-                charger(jeu);
+                {
+                    FILE *f_load = fopen("save.txt", "r");
+                    if (f_load) {
+                        fscanf(f_load, "%d", &TAILLE);
+                        fclose(f_load);
+                        
+                        detruire_jeu(jeu); // On détruit l'ancienne grille en cours
+                        jeu = creer_jeu(); // On reconstruit à la bonne taille
+                        charger(jeu);      // On applique les valeurs chargées
+                    } else {
+                        printf("\nErreur: Fichier de sauvegarde introuvable.\n");
+                        system("pause");
+                    }
+                }
+                mouvement_effectue = 0; // Pas de nouvelle tuile lors d'un chargement
+                break;
+            
+            default:
                 mouvement_effectue = 0;
+                printf("\n\x1b[91mTouche invalide ! Utilise Z Q S D pour bouger, X, W, C ou R.\x1b[0m\n");
+                system("pause");
                 break;
         }
 
