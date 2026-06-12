@@ -19,8 +19,12 @@ Jeu* creer_jeu();
 void detruire_jeu(Jeu *jeu);
 void afficher(Jeu *jeu);
 void ajouter_tuile(Jeu *jeu);
+
 void deplacer_gauche(Jeu *jeu);
-void pivoter(Jeu *jeu);
+void deplacer_droite(Jeu *jeu);
+void deplacer_haut(Jeu *jeu);
+void deplacer_bas(Jeu *jeu);
+
 void sauvegarder(Jeu *jeu);
 void charger(Jeu *jeu);
 
@@ -50,7 +54,7 @@ int main() {
 
     if (choix == 'C' || choix == 'c') {
 
-        // 1) Lire la taille dans le fichier AVANT de créer le jeu
+        // Lire la taille dans le fichier AVANT de créer le jeu
         FILE *f = fopen("save.txt", "r");
         if (!f) {
             printf("Aucune sauvegarde trouvée.\n");
@@ -61,10 +65,10 @@ int main() {
         fscanf(f, "%d", &TAILLE);
         fclose(f);
 
-        // 2) Créer le jeu avec la bonne taille
+        // Créer le jeu avec la bonne taille
         jeu = creer_jeu();
 
-        // 3) Charger la sauvegarde
+        // Charger la sauvegarde
         charger(jeu);
     }
     else if (choix == 'N' || choix == 'n') {
@@ -97,7 +101,7 @@ int main() {
             break;
         }
 
-        if (!mouvements_possibles(jeu)) {
+        if (defaite(jeu)) {
             printf("\n GAME OVER ! Aucun mouvement possible.\n");
             break;
         }
@@ -116,23 +120,17 @@ int main() {
 
             case 'd':
             case 'D':
-                pivoter(jeu); pivoter(jeu);
-                deplacer_gauche(jeu);
-                pivoter(jeu); pivoter(jeu);
+                deplacer_droite(jeu);
                 break;
 
             case 'z':
             case 'Z':
-                pivoter(jeu); pivoter(jeu); pivoter(jeu);
-                deplacer_gauche(jeu);
-                pivoter(jeu);
+                deplacer_haut(jeu);
                 break;
 
             case 's':
             case 'S':
-                pivoter(jeu);
-                deplacer_gauche(jeu);
-                pivoter(jeu); pivoter(jeu); pivoter(jeu);
+                deplacer_bas(jeu);
                 break;
 
             case 'x':

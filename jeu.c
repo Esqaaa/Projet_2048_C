@@ -8,7 +8,7 @@ typedef struct {
     int score;
 } Jeu;
 
-// Prototypes des fonctions du jeu
+// Création d'un nouveau jeu
 Jeu* creer_jeu() {
     Jeu *jeu = malloc(sizeof(Jeu));
     if (!jeu) return NULL;
@@ -30,7 +30,7 @@ void detruire_jeu(Jeu *jeu) {
     free(jeu);
 }
 
-// Prototypes des fonctions d'affichage et de logique du jeu
+// Ajoute une tuile "2" dans une case vide aléatoire
 void ajouter_tuile(Jeu *jeu) {
     int libres[TAILLE * TAILLE][2];
     int n = 0;
@@ -49,46 +49,93 @@ void ajouter_tuile(Jeu *jeu) {
     }
 }
 
-// Déplacement vers la gauche
+// Fusionne une ligne vers la gauche (utilisée pour tous les déplacements)
+void fusionnerLigne(int *ligne) {
+
+    // Compression vers la gauche
+    for (int rep = 0; rep < TAILLE; rep++)
+        for (int j = 1; j < TAILLE; j++)
+            if (ligne[j] != 0 && ligne[j-1] == 0) {
+                ligne[j-1] = ligne[j];
+                ligne[j] = 0;
+            }
+
+    // Fusion
+    for (int j = 0; j < TAILLE - 1; j++)
+        if (ligne[j] != 0 && ligne[j] == ligne[j+1]) {
+            ligne[j] *= 2;
+            ligne[j+1] = 0;
+        }
+
+    // Recompression
+    for (int j = 1; j < TAILLE; j++)
+        if (ligne[j] != 0 && ligne[j-1] == 0) {
+            ligne[j-1] = ligne[j];
+            ligne[j] = 0;
+        }
+}
+
+// Déplacement GAUCHE
 void deplacer_gauche(Jeu *jeu) {
+    for (int i = 0; i < TAILLE; i++)
+        fusionnerLigne(jeu->grille[i]);
+}
+
+// Déplacement DROITE
+void deplacer_droite(Jeu *jeu) {
     for (int i = 0; i < TAILLE; i++) {
 
-        for (int rep = 0; rep < TAILLE; rep++)
-            for (int j = 1; j < TAILLE; j++)
-                if (jeu->grille[i][j] != 0 && jeu->grille[i][j-1] == 0) {
-                    jeu->grille[i][j-1] = jeu->grille[i][j];
-                    jeu->grille[i][j] = 0;
-                }
+        int temp[TAILLE];
 
-        for (int j = 0; j < TAILLE - 1; j++)
-            if (jeu->grille[i][j] != 0 && jeu->grille[i][j] == jeu->grille[i][j+1]) {
-                jeu->grille[i][j] *= 2;
-                jeu->score += jeu->grille[i][j];
-                jeu->grille[i][j+1] = 0;
-            }
+        // Inverser la ligne
+        for (int j = 0; j < TAILLE; j++)
+            temp[j] = jeu->grille[i][TAILLE - 1 - j];
 
-        for (int j = 1; j < TAILLE; j++)
-            if (jeu->grille[i][j] != 0 && jeu->grille[i][j-1] == 0) {
-                jeu->grille[i][j-1] = jeu->grille[i][j];
-                jeu->grille[i][j] = 0;
-            }
+        fusionnerLigne(temp);
+
+        // Ré-inverser
+        for (int j = 0; j < TAILLE; j++)
+            jeu->grille[i][TAILLE - 1 - j] = temp[j];
     }
 }
 
-// Rotation de la grille dans le sens horaire
-void pivoter(Jeu *jeu) {
-    int tmp[TAILLE][TAILLE];
+// Déplacement HAUT
+void deplacer_haut(Jeu *jeu) {
+    for (int col = 0; col < TAILLE; col++) {
 
-    for (int i = 0; i < TAILLE; i++)
-        for (int j = 0; j < TAILLE; j++)
-            tmp[j][TAILLE - 1 - i] = jeu->grille[i][j];
+        int temp[TAILLE];
 
-    for (int i = 0; i < TAILLE; i++)
-        for (int j = 0; j < TAILLE; j++)
-            jeu->grille[i][j] = tmp[i][j];
+        // Extraire la colonne
+        for (int i = 0; i < TAILLE; i++)
+            temp[i] = jeu->grille[i][col];
+
+        fusionnerLigne(temp);
+
+        // Remettre dans la grille
+        for (int i = 0; i < TAILLE; i++)
+            jeu->grille[i][col] = temp[i];
+    }
 }
 
-// Vérifie s'il y'a des mouvements possibles (dans les 4 directions)
+// Déplacement BAS
+void deplacer_bas(Jeu *jeu) {
+    for (int col = 0; col < TAILLE; col++) {
+
+        int temp[TAILLE];
+
+        // Extraire colonne inversée
+        for (int i = 0; i < TAILLE; i++)
+            temp[i] = jeu->grille[TAILLE - 1 - i][col];
+
+        fusionnerLigne(temp);
+
+        // Ré-inverser dans la grille
+        for (int i = 0; i < TAILLE; i++)
+            jeu->grille[TAILLE - 1 - i][col] = temp[i];
+    }
+}
+
+// Mouvements possibles (s'il y en a)
 int mouvements_possibles(Jeu *jeu) {
     for (int i = 0; i < TAILLE; i++)
         for (int j = 0; j < TAILLE; j++) {
@@ -105,7 +152,7 @@ int mouvements_possibles(Jeu *jeu) {
     return 0;
 }
 
-// Vérifie si le joueur a atteint 2048
+// Vérification de la victoire (2048 atteint)
 int victoire(Jeu *jeu) {
     for (int i = 0; i < TAILLE; i++)
         for (int j = 0; j < TAILLE; j++)
@@ -114,3 +161,7 @@ int victoire(Jeu *jeu) {
     return 0;
 }
 
+// Vérification de la défaite
+int defaite(Jeu *jeu) {
+    return !mouvements_possibles(jeu);
+}
