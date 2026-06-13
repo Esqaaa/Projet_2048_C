@@ -43,7 +43,7 @@ void charger(Jeu *jeu) {
     FILE *f = fopen("save.txt", "r");
     if (!f) {
         perror("Aucune sauvegarde trouvee.\n");
-        return NULL;
+        return;
     }
 
     int taille_fichier;
@@ -53,7 +53,7 @@ void charger(Jeu *jeu) {
     if (taille_fichier != TAILLE) {
         perror("Sauvegarde incompatible avec la taille actuelle.\n");
         fclose(f);
-        return NULL;
+        return;
     }
 
     // Charger le score
@@ -68,7 +68,7 @@ void charger(Jeu *jeu) {
 
     fclose(f);
     printf("Sauvegarde chargee.\n");
-    printf("Appuyez sur Entrée pour continuer...");
+    printf("Appuyez sur Entree pour continuer...");
     getchar(); 
     getchar();
 }
