@@ -12,7 +12,7 @@ typedef struct {
 void sauvegarder(Jeu *jeu) {
     FILE *f = fopen("save.txt", "w");
     if (!f) {
-        printf("Erreur : impossible d'ouvrir save.txt\n");
+        perror("Erreur : impossible d'ouvrir save.txt\n");
         return;
     }
 
@@ -42,8 +42,8 @@ void sauvegarder(Jeu *jeu) {
 void charger(Jeu *jeu) {
     FILE *f = fopen("save.txt", "r");
     if (!f) {
-        printf("Aucune sauvegarde trouvee.\n");
-        return;
+        perror("Aucune sauvegarde trouvee.\n");
+        return NULL;
     }
 
     int taille_fichier;
@@ -51,9 +51,9 @@ void charger(Jeu *jeu) {
 
     // Vérifie que la taille correspond
     if (taille_fichier != TAILLE) {
-        printf("Sauvegarde incompatible avec la taille actuelle.\n");
+        perror("Sauvegarde incompatible avec la taille actuelle.\n");
         fclose(f);
-        return;
+        return NULL;
     }
 
     // Charger le score
