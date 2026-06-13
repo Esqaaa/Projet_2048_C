@@ -45,7 +45,7 @@ void detruire_jeu(Jeu *jeu) {
 
 // Ajoute une tuile "2" dans une case vide aléatoire
 void ajouter_tuile(Jeu *jeu) {
-    int libres[25][2]; // Taille max 5x5 = 25 cases
+    int libres[25][2]; 
     int n = 0;
 
     for (int i = 0; i < TAILLE; i++) {
