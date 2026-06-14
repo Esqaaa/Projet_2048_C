@@ -9,19 +9,24 @@ typedef struct {
 
 // Création d'un nouveau jeu
 Jeu* creer_jeu() {
+    // Allocation mémoire de la structure principale
     Jeu *jeu = malloc(sizeof(Jeu));
     if (!jeu) return NULL;
     jeu->score = 0;
 
+    // Allocation du tableau de pointeurs (donc les lignes de la grille)
     jeu->grille = malloc(TAILLE * sizeof(int*));
     if (!jeu->grille) { 
-        free(jeu); 
+        free(jeu); // On libère ce qui a déjà été alloué avant de quitter
         return NULL; 
     }
 
+    // Allocation de chaque ligne, initialisée à 0 grâce à calloc
     for (int i = 0; i < TAILLE; i++) {
         jeu->grille[i] = calloc(TAILLE, sizeof(int));
         if (!jeu->grille[i]) {
+
+            // En cas d'échec, on libère toutes les lignes déjà allouées
             for (int j = 0; j < i; j++) free(jeu->grille[j]);
             free(jeu->grille);
             free(jeu);
@@ -45,19 +50,22 @@ void detruire_jeu(Jeu *jeu) {
 
 // Ajoute une tuile "2" dans une case vide aléatoire
 void ajouter_tuile(Jeu *jeu) {
-    int libres[25][2]; 
-    int n = 0;
+    int libres[25][2]; // Tableau des coordonnées des cases vides (max 5x5 = 25)
+    int n = 0; // Nombre de cases vides trouvées
 
+    // Parcours de la grille + stockage des coordonnées de cases vides
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
             if (jeu->grille[i][j] == 0) {
-                libres[n][0] = i;
-                libres[n][1] = j;
+                libres[n][0] = i; // Ligne
+                libres[n][1] = j; // Colonne
                 n++;
             }
         }
     }
     if (n > 0) {
+
+        // On tire une case vide au hasard parmi toutes celles disponibles
         int r = rand() % n;
         jeu->grille[libres[r][0]][libres[r][1]] = 2;
     }
@@ -199,6 +207,7 @@ int mouvements_possibles(Jeu *jeu) {
     return 0;
 }
 
+// Vérification de la victoire 
 int victoire(Jeu *jeu) {
     for (int i = 0; i < TAILLE; i++)
         for (int j = 0; j < TAILLE; j++)
@@ -206,6 +215,7 @@ int victoire(Jeu *jeu) {
     return 0;
 }
 
+// Vérification de la défaite
 int defaite(Jeu *jeu) {
     return !mouvements_possibles(jeu);
 }

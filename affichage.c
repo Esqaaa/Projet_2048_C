@@ -51,6 +51,7 @@ void afficher_case(int valeur) {
     printf(RESET);
 }
 
+// Affiche la grille complète avec le score et les commandes disponibles
 void afficher(Jeu *jeu) {
     // Effacer l'écran
     system("cls");

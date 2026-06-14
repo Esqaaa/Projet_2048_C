@@ -4,6 +4,7 @@
 #define NEON    "\x1b[38;5;199m"   // rose néon
 #define NEON2   "\x1b[38;5;51m"    // bleu néon
 
+// Affiche le titre du jeu en ASCII art avec des couleurs néon
 void afficher_ascii() {
     printf(NEON"  ____   ___  _  _   ___  \n"RESET);
     printf(NEON" |___ \\ / _ \\| || | / _ \\ \n"RESET);
