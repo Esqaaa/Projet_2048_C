@@ -102,6 +102,7 @@ int main() {
             break;
         }
 
+        // Vérification de la défaite
         if (defaite(jeu)) {
             printf("\n GAME OVER ! Aucun mouvement possible.\n");
             break;
@@ -114,32 +115,38 @@ int main() {
         // Traitement de l'entrée utilisateur
         switch (c) {
 
+            // Cas de la touche "q" ou "Q" pour déplacer à gauche
             case 'q':
             case 'Q':
                 deplacer_gauche(jeu);
                 break;
 
+            // Cas de la touche "d" ou "D" pour déplacer à droite
             case 'd':
             case 'D':
                 deplacer_droite(jeu);
                 break;
 
+            // Cas de la touche "z" ou "Z" pour déplacer vers le haut
             case 'z':
             case 'Z':
                 deplacer_haut(jeu);
                 break;
 
+            // Cas de la touche "s" ou "S" pour déplacer vers le bas
             case 's':
             case 'S':
                 deplacer_bas(jeu);
                 break;
 
+            // Cas de la touche "x" ou "X" pour quitter le jeu
             case 'x':
             case 'X':
                 printf("\nAu revoir !\n");
                 detruire_jeu(jeu);
                 return 0;
 
+            // Cas de la touche "r" ou "R" pour recommencer une partie
             case 'r':
             case 'R':
                 detruire_jeu(jeu);
@@ -149,12 +156,14 @@ int main() {
                 mouvement_effectue = 0;
                 break;
 
+            // Cas de la touche "w" ou "W" pour sauvegarder une partie en cours
             case 'w':
             case 'W':
                 sauvegarder(jeu);
                 mouvement_effectue = 0;
                 break;
-            
+
+            // Cas de la touche "c" ou "C" pour charger une sauvegarde
             case 'c':
             case 'C':
                 {
@@ -174,6 +183,7 @@ int main() {
                 mouvement_effectue = 0; // Pas de nouvelle tuile lors d'un chargement
                 break;
             
+            // Cas par défaut
             default:
                 mouvement_effectue = 0;
                 printf("\n\x1b[91mTouche invalide ! Utilise Z Q S D pour bouger, X, W, C ou R.\x1b[0m\n");
