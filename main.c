@@ -47,44 +47,52 @@ int main() {
     printf("Votre choix : ");
     choix = getch();
 
-    // Initialisation RNG
+    // Initialisation du générateur de nombre aléatoire
     srand(time(NULL));
 
+    // Pointeur vers le jeu
     Jeu *jeu = NULL;
 
     if (choix == 'C' || choix == 'c') {
 
-        // Lire la taille dans le fichier AVANT de créer le jeu
+        // Lire la taille dans le fichier avant de créer le jeu
         FILE *f = fopen("save.txt", "r");
         if (!f) {
+            // Le fichier n'existe pas -> Pas de sauvegarde disponible
             printf("Aucune sauvegarde trouvee.\n");
             system("pause");
             return 0;
         }
 
+        // On lit la première valeur du fichier qui contient la taille de la grille
         fscanf(f, "%d", &TAILLE);
         fclose(f);
 
         // Créer le jeu avec la bonne taille
         jeu = creer_jeu();
 
-        // Charger la sauvegarde
+        // Charger la sauvegarde avec les valeurs sauvegardées
         charger(jeu);
     }
     else if (choix == 'N' || choix == 'n') {
-
+    
+        // Le joueur choisit sa taille de grille
         printf("Choisissez la taille de la grille (3, 4 ou 5) : ");
         scanf("%d", &TAILLE);
+
+        // Vérification que la taille est valide, sinon 4x4 par défaut
         if (TAILLE < 3 || TAILLE > 5) {
             printf("Taille invalide ! Utilisation de 4x4.\n");
             TAILLE = 4;
         }
 
+        // Création du jeu puis ajout de 2 tuiles pour débuter la partie
         jeu = creer_jeu();
         ajouter_tuile(jeu);
         ajouter_tuile(jeu);
     }
     else {
+        // Touche inconnue ou "X" -> on quitte simplement le programme
         return 0;
     }
 
