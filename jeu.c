@@ -65,7 +65,7 @@ void ajouter_tuile(Jeu *jeu) {
     }
     if (n > 0) {
 
-        // On tire une case vide au hasard parmi toutes celles disponibles
+        // Tirage d'une case vide
         int r = rand() % n;
         jeu->grille[libres[r][0]][libres[r][1]] = 2;
     }

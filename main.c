@@ -46,6 +46,7 @@ int main() {
     printf("(X) Quitter\n");
     printf("Votre choix : ");
     choix = getch();
+    printf("\nVous avez choisi l'option : %c\n",choix);
 
     // Initialisation du générateur de nombre aléatoire
     srand(time(NULL));
@@ -77,7 +78,7 @@ int main() {
     else if (choix == 'N' || choix == 'n') {
     
         // Le joueur choisit sa taille de grille
-        printf("Choisissez la taille de la grille (3, 4 ou 5) : ");
+        printf("\nChoisissez la taille de la grille (3, 4 ou 5) : ");
         scanf("%d", &TAILLE);
 
         // Vérification que la taille est valide, sinon 4x4 par défaut
