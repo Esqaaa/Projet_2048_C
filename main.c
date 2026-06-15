@@ -107,7 +107,7 @@ int main() {
 
         // Vérification de la victoire ou de la défaite
         if (victoire(jeu)) {
-            printf("\n BRAVO ! Vous avez atteint 2048 !\n");
+            printf("\nBRAVO ! Vous avez atteint 2048 !\n");
             break;
         }
 
@@ -192,6 +192,14 @@ int main() {
                 mouvement_effectue = 0; // Pas de nouvelle tuile lors d'un chargement
                 break;
             
+            // Code triche (pour démonstration)
+            case 't':
+            case 'T':
+                // Code triche : place une tuile 2048 directement
+                jeu->grille[0][0] = 2048;
+                mouvement_effectue = 0;
+                break;
+
             // Cas par défaut
             default:
                 mouvement_effectue = 0;
