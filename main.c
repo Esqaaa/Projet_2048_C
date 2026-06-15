@@ -62,7 +62,7 @@ int main() {
             // Le fichier n'existe pas -> Pas de sauvegarde disponible
             printf("Aucune sauvegarde trouvee.\n");
             system("pause");
-            return 0;
+            return main();
         }
 
         // On lit la première valeur du fichier qui contient la taille de la grille
@@ -92,9 +92,14 @@ int main() {
         ajouter_tuile(jeu);
         ajouter_tuile(jeu);
     }
-    else {
-        // Touche inconnue ou "X" -> on quitte simplement le programme
+
+    else if (choix == 'X' || choix == 'x') {
         return 0;
+    }
+    else {            
+        printf("Touche invalide !\n");
+        system("pause");
+        return main();
     }
 
     char c;
@@ -108,13 +113,17 @@ int main() {
         // Vérification de la victoire ou de la défaite
         if (victoire(jeu)) {
             printf("\nBRAVO ! Vous avez atteint 2048 !\n");
-            break;
+            system("pause");
+            detruire_jeu(jeu);
+            return main();
         }
 
         // Vérification de la défaite
         if (defaite(jeu)) {
             printf("\n GAME OVER ! Aucun mouvement possible.\n");
-            break;
+            system("pause");
+            detruire_jeu(jeu);
+            return main();
         }
 
         // Lecture de l'entrée utilisateur
